@@ -19,4 +19,4 @@ npx wrangler deploy
 - `src/pages/animals/[slug].astro` — animal page template
 - `src/pages/api/` — reserved for future Worker endpoints (none yet)
 - `wrangler.jsonc` — Workers config; D1 binding is commented out until the database exists
-- `src/site.config.mjs` — production domain (placeholder for now)
+- `src/site.config.mjs` — production domain

@@ -2,7 +2,7 @@
 name: Snow Leopard
 subtitle: "[PLACEHOLDER — subtitle to be written]"
 quadrant: "[PLACEHOLDER — quadrant name not decided yet]"
-description: "[PLACEHOLDER — hand-written description (max 155 characters) to be added before launch.]"
+description: "[PLACEHOLDER — hand-written description (max 155 characters) to be written in Stage 3.]"
 neighbors: []
 illustration: ../../assets/animals/snow-leopard.png
 illustrationAlt: "Placeholder image standing in for the Snow Leopard illustration."

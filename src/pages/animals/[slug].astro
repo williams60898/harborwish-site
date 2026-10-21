@@ -15,6 +15,7 @@ const { data } = animal;
 const { Content } = await render(animal);
 const neighbors = await getEntries(data.neighbors);
 
+// Share image stays jpg (not webp) for social-platform compatibility: approved by the owner.
 const ogImage = await getImage({
   src: data.illustration,
   width: 1200,
