@@ -1,0 +1,83 @@
+---
+import { SITE_NAME } from '../site.config.mjs';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Omit only for pages that must not be indexed (e.g. 404). */
+  canonicalPath?: string;
+  /** Absolute URL or site-relative path. */
+  ogImage?: string;
+  ogImageAlt?: string;
+  jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  ogImage = '/og-default.png',
+  ogImageAlt = `${SITE_NAME} share image`,
+  jsonLd,
+  noindex = false,
+} = Astro.props;
+
+const site = Astro.site!;
+const canonical = canonicalPath ? new URL(canonicalPath, site).href : undefined;
+const ogImageUrl = new URL(ogImage, site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">{SITE_NAME}</a>
+      <nav aria-label="Main">
+        <a href="/animals/">Animals</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <strong>Not a diagnostic tool.</strong> Harborwish is a space for gentle self-reflection. It
+        can't diagnose anything, and it's never a substitute for support from a qualified health
+        professional.
+      </p>
+      <p>
+        <strong>About our illustrations:</strong> the animal illustrations on Harborwish are created
+        with the help of AI.
+      </p>
+      <p class="copyright">© {new Date().getFullYear()} {SITE_NAME}</p>
+    </footer>
+  </body>
+</html>
