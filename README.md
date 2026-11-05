@@ -1,6 +1,6 @@
 # harborwish-site
 
-English emotion-animal field guide. Astro (static, prerendered) + `@astrojs/cloudflare`,
+English site for the Harborwish mood animals. Astro (static, prerendered) + `@astrojs/cloudflare`,
 deployed to Cloudflare Workers. Project rules live in `CLAUDE.md`.
 
 ## Commands
