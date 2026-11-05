@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+
+// All wording from docs/submission-copy-v0.3.md (Contact).
+const path = '/contact/';
+const title = 'Contact Harborwish | Harborwish';
+const h1 = 'Get in touch';
+const description =
+  'Questions about Harborwish, an order, or your data? Email hello@harborwish.com. We read every message.';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <article class="prose">
+    <h1>{h1}</h1>
+    <p class="lede">
+      Questions, feedback, or something not working? Email us at <a href="mailto:hello@harborwish.com">hello@harborwish.com</a>. We read every message and reply as soon as we can.
+    </p>
+
+    <h2>Orders and refunds</h2>
+    <p>
+      If you’ve bought a report, your receipt email from Paddle has your order number. For refunds, see our <a href="/refund-policy/">Refund Policy</a>, or visit <a href="https://paddle.net">paddle.net</a>. You can also email us and we’ll help.
+    </p>
+
+    <h2>Your data</h2>
+    <p>To ask about your personal data, see our <a href="/privacy/">Privacy Notice</a> or email the same address.</p>
+
+    <h2>The company</h2>
+    <address class="company">
+      <p>Shenyang Ruandi Technology Co., Ltd</p>
+      <p>Room 7-8387, 7th Floor, No. 39-4 Chuangxin 2nd Road, Taoxian Subdistrict, Shenyang Area of China (Liaoning) Pilot Free Trade Zone, Shenyang, Liaoning Province, China, 110179</p>
+      <p><a href="mailto:hello@harborwish.com">hello@harborwish.com</a></p>
+    </address>
+  </article>
+</Base>

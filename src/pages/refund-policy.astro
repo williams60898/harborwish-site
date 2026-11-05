@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+import { LEGAL_LAST_UPDATED } from '../site.config.mjs';
+
+// All wording from docs/submission-copy-v0.3.md (Refund Policy).
+// The company's Chinese legal name may appear on the legal pages only (owner-approved, CLAUDE.md).
+const path = '/refund-policy/';
+const title = 'Refund Policy | Harborwish';
+const h1 = 'Refund Policy';
+const description =
+  'Changed your mind? You can ask for a full refund within 14 days of buying your Harborwish report, no reason needed. Here’s how it works.';
+const buyerTerms = 'https://www.paddle.com/legal/checkout-buyer-terms';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <article class="prose legal">
+    <h1>{h1}</h1>
+    <p class="last-updated"><em>Last updated: {LEGAL_LAST_UPDATED}</em></p>
+
+    <p>This Refund Policy applies to purchases from harborwish.com (the “Site”), which is operated by Shenyang Ruandi Technology Co., Ltd (<span lang="zh-Hans">沈阳软嘀科技有限公司</span>), trading as Harborwish™ (“we”, “us”). It forms part of our <a href="/terms/">Terms of Service</a>.</p>
+
+    <h2>Who processes your order</h2>
+    <p>Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Refunds are issued by Paddle to the payment method you used.</p>
+
+    <h2>14-day refund</h2>
+    <p>If you change your mind, you can ask for a full refund within 14 days of the date you bought your report. You don’t need to give a reason.</p>
+
+    <h2>How to request a refund</h2>
+    <ul>
+      <li>Visit <a href="https://paddle.net">paddle.net</a>, find your order using the email address you used at checkout, and request a refund there. The receipt email Paddle sent you has the details.</li>
+      <li>Or email us at <a href="mailto:hello@harborwish.com">hello@harborwish.com</a> with the email address you used at checkout and your order number. We’ll pass your request to Paddle and help you follow it up.</li>
+    </ul>
+
+    <h2>If something goes wrong</h2>
+    <p>If your report doesn’t arrive, your private link doesn’t work, or what you received isn’t what we described, email us at <a href="mailto:hello@harborwish.com">hello@harborwish.com</a>. We’ll fix it or arrange a refund.</p>
+
+    <h2>How long it takes</h2>
+    <p>Once a refund is approved, Paddle issues it to your original payment method. How long it takes to show up depends on your bank or card provider.</p>
+
+    <h2>Your legal rights</h2>
+    <p>This policy doesn’t affect your statutory consumer rights where you live, including any right of withdrawal under EU or UK law. Those rights are administered by Paddle under its Buyer Terms (<a href={buyerTerms}>{buyerTerms}</a>).</p>
+
+    <h2>Refund abuse</h2>
+    <p>Paddle may decline a refund request where there is evidence of fraud or misuse of the refund process, as set out in Paddle’s Buyer Terms.</p>
+
+    <h2>Contact us</h2>
+    <p>Questions about a refund? Email <a href="mailto:hello@harborwish.com">hello@harborwish.com</a>.</p>
+  </article>
+</Base>

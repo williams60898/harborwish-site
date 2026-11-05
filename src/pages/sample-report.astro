@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+
+// All wording from docs/submission-copy-v0.3.md (Sample report).
+// The Your Undercurrent excerpt below is hard-coded on purpose (owner-approved exception in
+// CLAUDE.md). Never import or read paid content from anywhere for this page.
+const path = '/sample-report/';
+const title = 'Sample Report: The Gazing Snow Leopard | Harborwish';
+const h1 = 'What’s in your Full Report';
+const description =
+  'See what’s free and what’s inside the Harborwish Full Report, using the Gazing Snow Leopard as an example.';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <article class="prose">
+    <h1>{h1}</h1>
+    <p class="lede">
+      Here’s how a report is laid out, using the Gazing Snow Leopard as an example. Your own report is written for your own mood animal.
+    </p>
+
+    <section class="report-block">
+      <h2>Free with every result</h2>
+      <p class="report-animal"><strong>The Gazing Snow Leopard</strong> — <em>Sees everything, touches nothing.</em></p>
+      <ul>
+        <li><strong>Your Six Dimensions.</strong> Where this mood animal sits on each of the six dimensions, in plain words.</li>
+        <li><strong>Your Portrait.</strong> A few paragraphs that try to say what it’s like to be this mood animal right now.</li>
+        <li><strong>The Animals Nearest You.</strong> The two mood animals closest on the map, and the one difference between you.</li>
+        <li><strong>A gentle note for harder days,</strong> where it fits.</li>
+      </ul>
+      <p><a href="/animals/snow-leopard/">Read the free Snow Leopard chapter</a></p>
+    </section>
+
+    <section class="report-block report-block--paid">
+      <h2>Inside the Full Report — $9.99, one time</h2>
+      <p>More chapters and a closer read, written for your mood animal:</p>
+      <ul>
+        <li><strong>Your Undercurrent.</strong> What’s moving beneath the surface, in the part of you other people don’t usually see.</li>
+        <li><strong>Your Relationships.</strong> How this way of feeling shapes the way you hold on to people, step back from them, or reach for them.</li>
+        <li><strong>Your Trap.</strong> The loop this state tends to keep you in, and why it makes so much sense from the inside.</li>
+        <li><strong>Your Way Out.</strong> One honest direction to try next, small enough to actually take.</li>
+        <li><strong>Your Intensity.</strong> How deeply this mood animal runs in you right now: a light, medium, or deep version of the same animal, with a closer read of each of the six dimensions.</li>
+      </ul>
+
+      <p><em>A short excerpt from Your Undercurrent, the first chapter of the Full Report (The Gazing Snow Leopard):</em></p>
+      <blockquote class="excerpt">
+        <p>Everyone around you thinks you’ve “come through it” — thinks you’ve made your peace, sorted it out, reconciled with yourself. Because what they see is that pairing of low energy and control: no drama, no tears, no scene. You look like someone who lost with perfect grace — stood up from the table, shook hands, smiled, walked out. Flawless composure. So everyone quietly assumes you’re fine. But you know the truth: you didn’t let it go — you filed it.</p>
+      </blockquote>
+      <p><em>If this feels close to home, the free chapter ends with a note for harder days.</em></p>
+    </section>
+
+    <h2>How you get it</h2>
+    <p>
+      After you buy, we email you a private link. Open it on any device and read whenever you like. There’s nothing to install, no account to create, and no subscription.
+    </p>
+    {/* Not clickable and not linked anywhere until checkout launches. */}
+    <span class="button button--disabled" aria-disabled="true">Launching soon</span>
+    <p class="small-print">The Full Report is for self-reflection. It isn’t a diagnosis or professional advice.</p>
+  </article>
+</Base>

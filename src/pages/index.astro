@@ -2,8 +2,10 @@
 import Base from '../layouts/Base.astro';
 import { SITE_NAME } from '../site.config.mjs';
 
+// All wording from docs/submission-copy-v0.3.md (Home).
+const title = 'Harborwish — Who Are You Right Now? 64 Mood Animals';
 const description =
-  'A warm field guide to 64 emotion animals. Explore each one, notice which feel familiar, and get to know yourself a little better.';
+  'A harbor you can always come back to. Meet 64 mood animals, each a different way of feeling, and find the one that sounds like you right now.';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -15,18 +17,26 @@ const jsonLd = {
 };
 ---
 
-<Base
-  title={`${SITE_NAME} — A Field Guide to 64 Emotion Animals`}
-  description={description}
-  canonicalPath="/"
-  jsonLd={jsonLd}
->
+<Base title={title} description={description} canonicalPath="/" jsonLd={jsonLd}>
   <section class="hero">
-    <h1>Which animal feels like you?</h1>
+    <h1>The harbor where 64 mood animals come to rest.</h1>
     <p class="lede">
-      Harborwish is a gentle field guide to 64 emotion animals. Wander through them, notice which
-      ones feel familiar, and get to know yourself a little better along the way.
+      Which one are you, right now? Personality is your climate; emotion is today’s weather. Wander through all 64 mood animals and see which one sounds like you today.
     </p>
-    <a class="button" href="/animals/">Meet the 64 animals</a>
+    <a class="button" href="/animals/">Meet the 64 Mood Animals</a>
+  </section>
+
+  <section class="section">
+    <h2>What you’ll find here</h2>
+    <ul class="feature-list">
+      <li><strong>Free to explore.</strong> Every mood animal has a free portrait: who it is, how it feels, and which animals sit closest to it on the map.</li>
+      <li><strong>A mirror, not a doctor.</strong> Harborwish is for gentle self-reflection. It can’t diagnose anything, and it isn’t a substitute for professional support.</li>
+      <li><strong>Allowed to change.</strong> How you feel today isn’t who you are forever. You may meet a different mood animal tomorrow, and that’s the point.</li>
+    </ul>
+    <p class="link-row">
+      <a href="/how-it-works/">See how it works</a>
+      <span aria-hidden="true">·</span>
+      <a href="/pricing/">See pricing</a>
+    </p>
   </section>
 </Base>
