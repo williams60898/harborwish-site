@@ -1,101 +1,122 @@
 ---
-import { Image, getImage } from 'astro:assets';
-import { getEntries, render } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import { SITE_NAME } from '../../site.config.mjs';
-import { getAnimals, animalPath, animalTitle, type Animal } from '../../lib/animals';
+import { SITE_NAME, SITE_URL } from '../../site.config.mjs';
+import {
+  getAnimals,
+  animalPath,
+  animalTitle,
+  linkNeighbors,
+  ogImagePath,
+  OG_IMAGE_SIZE,
+  type Animal,
+} from '../../lib/animals';
 
 export async function getStaticPaths() {
   const animals = await getAnimals();
-  return animals.map((animal) => ({ params: { slug: animal.id }, props: { animal } }));
+  const existing = new Set(animals.map((a) => a.id));
+  return animals.map((animal) => ({ params: { slug: animal.id }, props: { animal, existing } }));
 }
 
-const { animal } = Astro.props as { animal: Animal };
+const { animal, existing } = Astro.props as { animal: Animal; existing: Set<string> };
 const { data } = animal;
-const { Content } = await render(animal);
-const neighbors = await getEntries(data.neighbors);
 
-// Share image stays jpg (not webp) for social-platform compatibility: approved by the owner.
-const ogImage = await getImage({
-  src: data.illustration,
-  width: 1200,
-  height: 630,
-  fit: 'cover',
-  format: 'jpg',
-});
+// Body from the content file, with neighbor names linked only where their page exists.
+const rendered = animal.rendered?.html;
+if (!rendered) throw new Error(`No rendered body for ${animal.id}`);
+const body = linkNeighbors(rendered, data.neighbors, existing).html;
 
 const path = animalPath(animal.id);
-const url = new URL(path, Astro.site).href;
+const site = Astro.site!;
+const url = new URL(path, site).href;
+const home = new URL('/', site).href;
 const title = animalTitle(animal);
+const ogImage = ogImagePath(animal.id);
+const ogImageUrl = new URL(ogImage, site).href;
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: title,
-  headline: `${data.name} Personality`,
-  description: data.description,
-  url,
-  inLanguage: 'en',
-  image: new URL(ogImage.src, Astro.site).href,
-  isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: new URL('/', Astro.site).href },
-  breadcrumb: {
+const organization = { '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: SITE_NAME, url: home };
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: data.name,
+    description: data.description,
+    url,
+    mainEntityOfPage: url,
+    image: ogImageUrl,
+    inLanguage: 'en',
+    author: organization,
+    publisher: organization,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+  },
+  {
+    '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Animals', item: new URL('/animals/', Astro.site).href },
-      { '@type': 'ListItem', position: 2, name: data.name, item: url },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: home },
+      { '@type': 'ListItem', position: 2, name: 'Mood Animals', item: new URL('/animals/', site).href },
+      { '@type': 'ListItem', position: 3, name: data.name, item: url },
     ],
   },
-};
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    name: SITE_NAME,
+    url: home,
+    inLanguage: 'en',
+    publisher: organization,
+  },
+];
 ---
 
 <Base
   title={title}
   description={data.description}
   canonicalPath={path}
-  ogImage={ogImage.src}
-  ogImageAlt={data.illustrationAlt}
+  ogImage={ogImage}
+  ogImageAlt={data.image_alt}
+  ogImageWidth={OG_IMAGE_SIZE.width}
+  ogImageHeight={OG_IMAGE_SIZE.height}
+  ogType="article"
   jsonLd={jsonLd}
 >
-  <nav aria-label="Breadcrumb" class="animal-meta">
-    <a href="/animals/">Animals</a> › {data.name}
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Home</a> <span aria-hidden="true">›</span> <a href="/animals/">Mood Animals</a>
+    <span aria-hidden="true">›</span> <span aria-current="page">{data.name}</span>
   </nav>
 
-  <article>
-    <h1>{data.name}</h1>
-    <p class="lede">{data.subtitle}</p>
-    <p class="animal-meta">Quadrant: {data.quadrant}</p>
+  <article class="animal">
+    <header class="animal-header">
+      <h1>{data.name}</h1>
+      <p class="lede">{data.subtitle}</p>
+    </header>
 
-    <figure>
-      <Image
-        src={data.illustration}
-        alt={data.illustrationAlt}
-        width={800}
-        format="webp"
-        loading="lazy"
-        decoding="async"
-      />
-      <figcaption>{data.illustrationCaption}</figcaption>
-    </figure>
+    <blockquote class="pull-quote voice">
+      <p>“{data.voice}”</p>
+    </blockquote>
 
-    <section class="portrait" aria-label="Portrait">
-      <Content />
-    </section>
+    <Image
+      class="poster"
+      src={data.image}
+      alt={data.image_alt}
+      widths={[400, 800, 1086]}
+      sizes="(min-width: 32rem) 480px, calc(100vw - 2rem)"
+      width={data.image.width}
+      height={data.image.height}
+      format="webp"
+      quality={80}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
 
-    <section aria-labelledby="neighbors-heading">
-      <h2 id="neighbors-heading">Neighboring animals</h2>
-      {
-        neighbors.length > 0 ? (
-          <ul>
-            {neighbors.map((n) => (
-              <li>
-                <a href={animalPath(n.id)}>{n.data.name}</a>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="placeholder-note">[PLACEHOLDER — neighboring animals to be added.]</p>
-        )
-      }
-    </section>
+    <p class="coordinates">{data.coordinates.join(' · ')}</p>
+
+    <div class="animal-body" set:html={body} />
+
+    <p class="animal-cta">
+      <a class="button" href="/animals/">Meet the 64 Mood Animals</a>
+    </p>
   </article>
 </Base>

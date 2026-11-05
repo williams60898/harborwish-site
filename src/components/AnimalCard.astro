@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import { animalPath, type Animal } from '../lib/animals';
+
+interface Props {
+  animal: Animal;
+}
+
+const { animal } = Astro.props;
+const { data } = animal;
+---
+
+<li>
+  <a href={animalPath(animal.id)}>
+    <Image
+      src={data.image}
+      alt={data.image_alt}
+      widths={[400, 800]}
+      sizes="(min-width: 60rem) 14rem, (min-width: 28rem) 45vw, 100vw"
+      width={data.image.width}
+      height={data.image.height}
+      format="webp"
+      quality={80}
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="card-body">
+      <div class="card-name">{data.name}</div>
+      <div class="card-subtitle">{data.subtitle}</div>
+    </div>
+  </a>
+</li>

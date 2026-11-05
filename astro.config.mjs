@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import { SITE_URL } from './src/site.config.mjs';
+import ogImages from './src/integrations/og-images.mjs';
 
 export default defineConfig({
   site: SITE_URL,
@@ -15,4 +16,5 @@ export default defineConfig({
   }),
   // Sessions would add a cookie and a KV binding — both out of scope until Stage 8.
   session: false,
+  integrations: [ogImages()],
 });

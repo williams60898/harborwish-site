@@ -1,6 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import AnimalCard from '../components/AnimalCard.astro';
 import { SITE_NAME } from '../site.config.mjs';
+import { getAnimals } from '../lib/animals';
+
+const animals = await getAnimals();
 
 // All wording from docs/submission-copy-v0.3.md (Home).
 const title = 'Harborwish — Who Are You Right Now? 64 Mood Animals';
@@ -24,6 +28,13 @@ const jsonLd = {
       Which one are you, right now? Personality is your climate; emotion is today’s weather. Wander through all 64 mood animals and see which one sounds like you today.
     </p>
     <a class="button" href="/animals/">Meet the 64 Mood Animals</a>
+  </section>
+
+  <section class="sample-animals" aria-labelledby="start-heading">
+    <h2 id="start-heading">Start with a few</h2>
+    <ul class="animal-grid">
+      {animals.map((animal) => <AnimalCard animal={animal} />)}
+    </ul>
   </section>
 
   <section class="section">

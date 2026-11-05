@@ -1,10 +1,11 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import AnimalCard from '../../components/AnimalCard.astro';
 import { SITE_NAME } from '../../site.config.mjs';
-import { getAnimals, animalPath } from '../../lib/animals';
+import { getAnimals, animalPath, progressLine } from '../../lib/animals';
 
 const animals = await getAnimals();
+const progress = progressLine(animals.length);
 
 const description =
   'Browse all 64 Harborwish emotion animals. Open any one that catches your eye and see whether its way of feeling sounds like you.';
@@ -43,25 +44,8 @@ const jsonLd = {
   </p>
 
   <ul class="animal-grid">
-    {
-      animals.map((animal) => (
-        <li>
-          <a href={animalPath(animal.id)}>
-            <Image
-              src={animal.data.illustration}
-              alt={animal.data.illustrationAlt}
-              width={400}
-              format="webp"
-              loading="lazy"
-              decoding="async"
-            />
-            <div class="card-body">
-              <div class="card-name">{animal.data.name}</div>
-              <div class="card-subtitle">{animal.data.subtitle}</div>
-            </div>
-          </a>
-        </li>
-      ))
-    }
+    {animals.map((animal) => <AnimalCard animal={animal} />)}
   </ul>
+
+  {progress && <p class="grid-note">{progress}</p>}
 </Base>
