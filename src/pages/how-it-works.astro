@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+
+// All wording from docs/submission-copy-v0.3.md (How it works).
+const path = '/how-it-works/';
+const title = 'How Harborwish Works | Harborwish';
+const h1 = 'How Harborwish works';
+const description =
+  'Answer a short quiz about right now, meet the mood animal that matches how you feel, and read deeper if you want to. Here’s how Harborwish works.';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <article class="prose">
+    <h1>{h1}</h1>
+    <p class="lede">
+      Harborwish isn’t asking who you are in general. It’s asking something gentler: how are you, right now?
+    </p>
+
+    <ol class="steps">
+      <li>
+        <h2>1. Answer for right now</h2>
+        <p>
+          A short quiz asks how you feel at this moment, not who you’ve always been. There are no right answers. <em>The quiz is launching soon.</em>
+        </p>
+      </li>
+      <li>
+        <h2>2. Meet your mood animal</h2>
+        <p>
+          Your answers place you on a map of six dimensions of feeling, and one of 64 mood animals comes up. Your result is free: your mood animal, Your Six Dimensions, Your Portrait, and The Animals Nearest You.
+        </p>
+      </li>
+      <li>
+        <h2>3. Go deeper, if you want</h2>
+        <p>
+          The Full Report is a one-time $9.99 purchase. It adds four chapters written for your mood animal: Your Undercurrent, Your Relationships, Your Trap, and Your Way Out, plus a closer read of how deeply your mood animal runs in you.
+        </p>
+        <p class="link-row">
+          <a href="/sample-report/">See what’s inside</a>
+          <span aria-hidden="true">·</span>
+          <a href="/pricing/">See pricing</a>
+        </p>
+      </li>
+    </ol>
+
+    <h2>You’re allowed to change</h2>
+    <p>
+      Personality is your climate; emotion is today’s weather. Take the quiz again on another day and you may meet a different mood animal. That isn’t a flaw in the quiz. It’s the point: how you feel is allowed to move.
+    </p>
+
+    <h2>Where the six dimensions come from</h2>
+    <p>
+      Harborwish describes how you feel in six dimensions: valence, energy, agency, social approach or avoidance, time orientation, and clarity. Each draws on established ideas in emotion psychology. The way we combine them, and the 64 mood animals, are our own. Harborwish is a tool for self-reflection, not a scientific or clinical instrument, and we don’t claim it measures you.
+    </p>
+
+    <h2>What Harborwish isn’t</h2>
+    <p>
+      Harborwish is not a medical or psychological service, and nothing here is advice. If you are struggling, please reach out to a qualified professional or someone you trust. If you are in immediate danger, contact your local emergency services or a crisis line in your country.
+    </p>
+  </article>
+</Base>

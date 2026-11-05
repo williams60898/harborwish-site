@@ -25,6 +25,23 @@ const {
 } = Astro.props;
 
 const site = Astro.site!;
+
+// Header menu and footer links: wording from docs/submission-copy-v0.3.md.
+const mainNav = [
+  { href: '/animals/', label: 'Mood Animals' },
+  { href: '/how-it-works/', label: 'How it works' },
+  { href: '/pricing/', label: 'Pricing' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const footerNav = [
+  { href: '/terms/', label: 'Terms of Service' },
+  { href: '/refund-policy/', label: 'Refund Policy' },
+  { href: '/privacy/', label: 'Privacy Notice' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const isCurrent = (href: string) => Astro.url.pathname === href;
 const canonical = canonicalPath ? new URL(canonicalPath, site).href : undefined;
 const ogImageUrl = new URL(ogImage, site).href;
 ---
@@ -59,7 +76,13 @@ const ogImageUrl = new URL(ogImage, site).href;
     <header class="site-header">
       <a class="brand" href="/">{SITE_NAME}</a>
       <nav aria-label="Main">
-        <a href="/animals/">Animals</a>
+        {
+          mainNav.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
       </nav>
     </header>
 
@@ -68,16 +91,25 @@ const ogImageUrl = new URL(ogImage, site).href;
     </main>
 
     <footer class="site-footer">
+      <nav class="footer-links" aria-label="Footer">
+        {
+          footerNav.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
       <p>
-        <strong>Not a diagnostic tool.</strong> Harborwish is a space for gentle self-reflection. It
-        can't diagnose anything, and it's never a substitute for support from a qualified health
-        professional.
+        <strong>Not a diagnostic tool.</strong> Harborwish™ is a mirror, not a doctor — a space for gentle self-reflection. It can’t diagnose or treat anything, and it’s never a substitute for support from a qualified health professional.
       </p>
       <p>
-        <strong>About our illustrations:</strong> the animal illustrations on Harborwish are created
-        with the help of AI.
+        <strong>About our illustrations:</strong> the animal illustrations on Harborwish are created with the help of AI.
       </p>
-      <p class="copyright">© {new Date().getFullYear()} {SITE_NAME}</p>
+      <p>
+        Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders.
+      </p>
+      <p class="copyright">© 2026 Harborwish™</p>
     </footer>
   </body>
 </html>

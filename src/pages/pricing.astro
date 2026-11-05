@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+
+// All wording from docs/submission-copy-v0.3.md (Pricing).
+const path = '/pricing/';
+const title = 'Pricing | Harborwish';
+const h1 = 'One price. No subscription.';
+const description =
+  'Your result is always free. The Full Report is a one-time $9.99 purchase: four more chapters about your mood animal. No subscription, nothing renews.';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <section class="hero hero--compact">
+    <h1>{h1}</h1>
+    <p class="lede">
+      Your result is always free. If you’d like to go deeper, the Full Report is a one-time purchase.
+    </p>
+  </section>
+
+  <div class="plans">
+    <section class="plan">
+      <h2>Free</h2>
+      <p class="plan-price"><strong>$0</strong></p>
+      <ul>
+        <li>Your mood animal, with its name and a one-line portrait</li>
+        <li>Your Six Dimensions</li>
+        <li>Your Portrait</li>
+        <li>The Animals Nearest You</li>
+        <li>A gentle note for harder days, where it fits</li>
+      </ul>
+    </section>
+
+    <section class="plan plan--featured">
+      <h2>Full Report</h2>
+      <p class="plan-price"><strong>$9.99, one time</strong></p>
+      <ul>
+        <li>Everything in the free result</li>
+        <li>Four more chapters written for your mood animal: Your Undercurrent, Your Relationships, Your Trap, and Your Way Out, plus how deeply it runs in you: your intensity level and a closer read of each of your six dimensions</li>
+        <li>A private link, emailed to you, so you can read it whenever you like</li>
+        <li>No subscription. Nothing renews.</li>
+      </ul>
+      {/* Not clickable and not linked anywhere until checkout launches. */}
+      <span class="button button--disabled" aria-disabled="true">Launching soon</span>
+      <p><a href="/sample-report/">See what’s inside the Full Report</a></p>
+    </section>
+  </div>
+
+  <p class="small-print">
+    Prices are in US dollars. Any taxes that apply to you are shown at checkout before you pay. Payments are handled by Paddle, our Merchant of Record.
+  </p>
+
+  <section class="prose faq">
+    <h2>Questions</h2>
+    <p><strong>Is it really a one-time payment?</strong> Yes. You pay once for one report. There’s no subscription and nothing renews automatically.</p>
+    <p><strong>How long can I read my report?</strong> Through your private link, for as long as Harborwish is running.</p>
+    <p><strong>What if I get a different mood animal next time?</strong> Your mood can change, and so can your result. A Full Report belongs to the mood animal you bought it for. If a new result gives you a different mood animal, that animal’s report is a separate purchase.</p>
+    <p><strong>What if I change my mind?</strong> You have 14 days to ask for a full refund, no reason needed. See our <a href="/refund-policy/">Refund Policy</a>.</p>
+    <p><strong>Is this medical or psychological advice?</strong> No. Harborwish is for self-reflection. It can’t diagnose anything and isn’t a substitute for professional support.</p>
+  </section>
+</Base>

@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+import { LEGAL_LAST_UPDATED } from '../site.config.mjs';
+
+// All wording from docs/submission-copy-v0.3.md (Terms of Service).
+// The company's Chinese legal name may appear on the legal pages only (owner-approved, CLAUDE.md).
+const path = '/terms/';
+const title = 'Terms of Service | Harborwish';
+const h1 = 'Terms of Service';
+const description =
+  'The terms for using Harborwish and buying the Full Report: what Harborwish is and isn’t, one-time purchases through Paddle, and your rights.';
+const buyerTerms = 'https://www.paddle.com/legal/checkout-buyer-terms';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <article class="prose legal">
+    <h1>{h1}</h1>
+    <p class="last-updated"><em>Last updated: {LEGAL_LAST_UPDATED}</em></p>
+
+    <p>Welcome to Harborwish. These Terms of Service (“Terms”) explain how you may use harborwish.com (the “Site”) and what you can buy from it. By using the Site, you agree to them, so please read them.</p>
+
+    <h2>1. Who we are</h2>
+    <p>The Site is operated by Shenyang Ruandi Technology Co., Ltd (<span lang="zh-Hans">沈阳软嘀科技有限公司</span>), a company registered in the People’s Republic of China, with its registered address at Room 7-8387, 7th Floor, No. 39-4 Chuangxin 2nd Road, Taoxian Subdistrict, Shenyang Area of China (Liaoning) Pilot Free Trade Zone, Shenyang, Liaoning Province, China, 110179 (“we”, “us”, “our”). Harborwish™ is our brand and trading name. When you use the Site or buy something from it, you are dealing with us on the terms below. You can reach us any time at <a href="mailto:hello@harborwish.com">hello@harborwish.com</a>.</p>
+
+    <h2>2. Accepting these Terms</h2>
+    <p>By continuing to use the Site, you confirm that you have read these Terms and agree to them. If you don’t agree, please don’t use the Site. You must be at least 16 years old to use Harborwish.</p>
+
+    <h2>3. What Harborwish is, and what it isn’t</h2>
+    <p>Harborwish is gentle, personality-style reading material built around 64 mood animals. It is offered for information and entertainment, and for your own personal reflection.</p>
+    <p>Harborwish is not a medical, psychological, or therapeutic service. It does not diagnose, assess, treat, or prevent any condition, and nothing on the Site is medical, psychological, legal, or financial advice. What you read here describes a moment and a mood, not a fixed trait or a clinical finding. Please don’t use Harborwish to make important decisions about your health, and never use it to make decisions about other people, such as hiring, housing, credit, or insurance decisions.</p>
+    <p>If you are struggling, please reach out to a qualified professional or someone you trust. If you are in immediate danger, contact your local emergency services or a crisis line in your country.</p>
+
+    <h2>4. Using the Site</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>use the Site for anything unlawful, or in a way that breaks the law where you live;</li>
+      <li>commit fraud, send spam, or misrepresent who you are;</li>
+      <li>infringe anyone’s intellectual property or other rights;</li>
+      <li>interfere with the Site’s security or operation, for example by introducing malware, probing for vulnerabilities, overloading the Site, or scraping or copying it by automated means (ordinary search-engine indexing is fine);</li>
+      <li>resell, publicly share, or redistribute paid content or the private links we give you; or</li>
+      <li>use our content to train or build machine-learning models.</li>
+    </ul>
+
+    <h2>5. Purchases</h2>
+    <p>Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders.</p>
+    <p>Paddle handles payment, taxes, invoicing, and refunds. When you buy, you also agree to Paddle’s Buyer Terms (<a href={buyerTerms}>{buyerTerms}</a>), which govern payment, billing, taxes, cancellations, and refunds.</p>
+    <p>The Full Report is sold as a one-time purchase. It unlocks the complete written report for the quiz result you received. There is no subscription and nothing renews automatically. The price, including any taxes that apply to you, is shown at checkout before you pay. After you buy, we send a private link to the email address you gave at checkout. Your purchase gives you access to the report through that link for as long as we operate the Site.</p>
+    <p>Refunds are covered in our <a href="/refund-policy/">Refund Policy</a>.</p>
+
+    <h2>6. Our content and your report</h2>
+    <p>We and our licensors own the Site and everything on it, including the text, animal characters and names, illustrations, design, and the Harborwish name and logo. Harborwish™ is our trademark. The animal illustrations on the Site are created with the help of AI.</p>
+    <p>If you buy a report, we give you a personal, non-exclusive, non-transferable license to read it and keep a copy for your own non-commercial use. You are welcome to share your free result, for example as a screenshot of your mood animal. Beyond that, you may not copy, republish, sell, or distribute the Site’s content or your paid report.</p>
+
+    <h2>7. Availability</h2>
+    <p>We work to keep the Site running, but we don’t promise it will always be available, uninterrupted, or error-free. We may change, pause, or discontinue parts of the Site at any time.</p>
+
+    <h2>8. Suspension and ending access</h2>
+    <p>We may suspend or end your access to the Site or to paid content if you materially breach these Terms, fail to pay, create a security or fraud risk, or repeatedly or seriously violate these Terms. If we end your access to a report you paid for for any reason other than your own breach, we will refund your purchase.</p>
+
+    <h2>9. Disclaimers and limits on liability</h2>
+    <p>Harborwish is provided “as is” and “as available”. To the fullest extent the law allows, we don’t promise that the content will be accurate, complete, or right for you, and we are not liable for indirect or consequential losses. Our total liability for any claim connected to a purchase is limited to the amount you paid for it. Nothing in these Terms excludes or limits anything that can’t legally be excluded or limited, such as liability for fraud or for death or personal injury caused by negligence, or your statutory consumer rights where you live.</p>
+
+    <h2>10. Changes to these Terms</h2>
+    <p>We may update these Terms from time to time. The updated version applies from the “Last updated” date shown above. If we make a significant change, we will say so on the Site.</p>
+
+    <h2>11. Governing law</h2>
+    <p>These Terms, and any dispute connected with them, are governed by the laws of the People’s Republic of China. If you are a consumer, this does not take away the protection of the mandatory consumer laws of the country where you live. Questions about payment or refunds are handled under Paddle’s Buyer Terms.</p>
+
+    <h2>12. Contact us</h2>
+    <p>Questions about these Terms? Email <a href="mailto:hello@harborwish.com">hello@harborwish.com</a>, or write to Shenyang Ruandi Technology Co., Ltd, Room 7-8387, 7th Floor, No. 39-4 Chuangxin 2nd Road, Taoxian Subdistrict, Shenyang Area of China (Liaoning) Pilot Free Trade Zone, Shenyang, Liaoning Province, China, 110179.</p>
+  </article>
+</Base>

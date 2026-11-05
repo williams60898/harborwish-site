@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { webPageJsonLd } from '../lib/seo';
+
+// All wording from docs/submission-copy-v0.3.md (About).
+const path = '/about/';
+const title = 'About Harborwish | Harborwish';
+const h1 = 'A harbor you can always come back to';
+const description =
+  'Harborwish is a harbor you can always come back to: 64 mood animals, each a different way of feeling. Learn what it is and who makes it.';
+---
+
+<Base
+  title={title}
+  description={description}
+  canonicalPath={path}
+  jsonLd={webPageJsonLd(Astro.site!, path, h1, description)}
+>
+  <article class="prose">
+    <h1>{h1}</h1>
+    <p class="lede">Most personality tests ask who you are. Harborwish asks something gentler: who are you right now?</p>
+    <p>
+      Personality is your climate; emotion is today’s weather. Harborwish is about the weather: the mood you’re actually in today, with a name and a picture you can recognize yourself in. We use 64 mood animals because a feeling is easier to hold when it has a face.
+    </p>
+
+    <h2>Where it comes from</h2>
+    <p>
+      Harborwish is built on a six-dimension model of how a person feels at a given moment: valence, energy, agency, social approach or avoidance, time orientation, and clarity. Each dimension draws on established ideas in emotion psychology, such as the pleasure–arousal–dominance model, approach–avoidance motivation, time-perspective research, and constructed-emotion theory. The way we combine them, and the 64 mood animals, are our own.
+    </p>
+    <p>
+      We present Harborwish as a tool for self-reflection. It is not a scientific or clinical instrument, and we don’t claim it measures you.
+    </p>
+    <p>The framework is written up in a book manuscript, <em>Who Are You Right Now</em>.</p>
+
+    <h2>What Harborwish isn’t</h2>
+    <p>
+      Harborwish is not a medical or psychological service. It can’t diagnose anything, and nothing on this site is medical, psychological, legal, or financial advice.
+    </p>
+    <p>
+      If you are struggling, please reach out to a qualified professional or someone you trust. If you are in immediate danger, contact your local emergency services or a crisis line in your country.
+    </p>
+
+    <h2>Who we are</h2>
+    <p>
+      Harborwish™ is our trademark. The animal illustrations on this site are created with the help of AI. Our company details are on the <a href="/contact/">Contact page</a>.
+    </p>
+    <p><a href="/contact/">Get in touch</a></p>
+  </article>
+</Base>
