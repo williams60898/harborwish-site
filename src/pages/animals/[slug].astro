@@ -1,0 +1,101 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { getEntries, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE_NAME } from '../../site.config.mjs';
+import { getAnimals, animalPath, animalTitle, type Animal } from '../../lib/animals';
+
+export async function getStaticPaths() {
+  const animals = await getAnimals();
+  return animals.map((animal) => ({ params: { slug: animal.id }, props: { animal } }));
+}
+
+const { animal } = Astro.props as { animal: Animal };
+const { data } = animal;
+const { Content } = await render(animal);
+const neighbors = await getEntries(data.neighbors);
+
+// Share image stays jpg (not webp) for social-platform compatibility: approved by the owner.
+const ogImage = await getImage({
+  src: data.illustration,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+});
+
+const path = animalPath(animal.id);
+const url = new URL(path, Astro.site).href;
+const title = animalTitle(animal);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  headline: `${data.name} Personality`,
+  description: data.description,
+  url,
+  inLanguage: 'en',
+  image: new URL(ogImage.src, Astro.site).href,
+  isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: new URL('/', Astro.site).href },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Animals', item: new URL('/animals/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: data.name, item: url },
+    ],
+  },
+};
+---
+
+<Base
+  title={title}
+  description={data.description}
+  canonicalPath={path}
+  ogImage={ogImage.src}
+  ogImageAlt={data.illustrationAlt}
+  jsonLd={jsonLd}
+>
+  <nav aria-label="Breadcrumb" class="animal-meta">
+    <a href="/animals/">Animals</a> › {data.name}
+  </nav>
+
+  <article>
+    <h1>{data.name}</h1>
+    <p class="lede">{data.subtitle}</p>
+    <p class="animal-meta">Quadrant: {data.quadrant}</p>
+
+    <figure>
+      <Image
+        src={data.illustration}
+        alt={data.illustrationAlt}
+        width={800}
+        format="webp"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>{data.illustrationCaption}</figcaption>
+    </figure>
+
+    <section class="portrait" aria-label="Portrait">
+      <Content />
+    </section>
+
+    <section aria-labelledby="neighbors-heading">
+      <h2 id="neighbors-heading">Neighboring animals</h2>
+      {
+        neighbors.length > 0 ? (
+          <ul>
+            {neighbors.map((n) => (
+              <li>
+                <a href={animalPath(n.id)}>{n.data.name}</a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="placeholder-note">[PLACEHOLDER — neighboring animals to be added.]</p>
+        )
+      }
+    </section>
+  </article>
+</Base>

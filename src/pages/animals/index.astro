@@ -1,0 +1,67 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { SITE_NAME } from '../../site.config.mjs';
+import { getAnimals, animalPath } from '../../lib/animals';
+
+const animals = await getAnimals();
+
+const description =
+  'Browse all 64 Harborwish emotion animals. Open any one that catches your eye and see whether its way of feeling sounds like you.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Meet the 64 animals',
+  url: new URL('/animals/', Astro.site).href,
+  description,
+  inLanguage: 'en',
+  isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: new URL('/', Astro.site).href },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: animals.length,
+    itemListElement: animals.map((animal, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: animal.data.name,
+      url: new URL(animalPath(animal.id), Astro.site).href,
+    })),
+  },
+};
+---
+
+<Base
+  title={`All 64 Emotion Animals — The Field Guide | ${SITE_NAME}`}
+  description={description}
+  canonicalPath="/animals/"
+  jsonLd={jsonLd}
+>
+  <h1>Meet the 64 animals</h1>
+  <p class="lede">
+    Take your time. Each animal holds a different way of feeling — open any one that catches your
+    eye.
+  </p>
+
+  <ul class="animal-grid">
+    {
+      animals.map((animal) => (
+        <li>
+          <a href={animalPath(animal.id)}>
+            <Image
+              src={animal.data.illustration}
+              alt={animal.data.illustrationAlt}
+              width={400}
+              format="webp"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="card-body">
+              <div class="card-name">{animal.data.name}</div>
+              <div class="card-subtitle">{animal.data.subtitle}</div>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

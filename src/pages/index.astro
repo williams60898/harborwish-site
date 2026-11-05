@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site.config.mjs';
+
+const description =
+  'A warm field guide to 64 emotion animals. Explore each one, notice which feel familiar, and get to know yourself a little better.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME,
+  url: new URL('/', Astro.site).href,
+  description,
+  inLanguage: 'en',
+};
+---
+
+<Base
+  title={`${SITE_NAME} — A Field Guide to 64 Emotion Animals`}
+  description={description}
+  canonicalPath="/"
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <h1>Which animal feels like you?</h1>
+    <p class="lede">
+      Harborwish is a gentle field guide to 64 emotion animals. Wander through them, notice which
+      ones feel familiar, and get to know yourself a little better along the way.
+    </p>
+    <a class="button" href="/animals/">Meet the 64 animals</a>
+  </section>
+</Base>

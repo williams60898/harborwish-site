@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "harborwish-site",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  }
+
+  // D1 database — reserved, NOT enabled yet (the database has not been created).
+  // When the owner approves, create it with `npx wrangler d1 create <name>`, then
+  // uncomment and fill in the id printed by that command:
+  //
+  // ,"d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "<name>",
+  //     "database_id": "<id from wrangler d1 create>"
+  //   }
+  // ]
+}
