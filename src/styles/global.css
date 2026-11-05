@@ -170,13 +170,49 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; margin: 0 0 0.5rem; }
 .animal-grid .card-name { font-weight: 700; }
 .animal-grid .card-subtitle { color: var(--muted); font-size: 0.9rem; }
 
-.animal-meta { color: var(--muted); }
+.grid-note { color: var(--muted); text-align: center; margin-top: 1.5rem; }
+.sample-animals { margin-block: 1rem 2rem; }
 
-figure { margin: 2rem 0; }
-figure img { width: 100%; max-width: 36rem; height: auto; border-radius: 1rem; display: block; }
-figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
-
-.portrait { max-width: 40rem; }
+/* Animal page */
+.breadcrumb { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+.breadcrumb span[aria-hidden] { margin-inline: 0.25rem; }
+.animal { max-width: 40rem; margin: 0 auto; overflow-wrap: break-word; }
+.animal-header .lede { margin-top: 0; }
+.pull-quote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.25rem;
+  border-left: 4px solid var(--highlight);
+  background: var(--card);
+  border-radius: 0 0.75rem 0.75rem 0;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--text);
+}
+.pull-quote p { margin: 0; }
+.poster {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  margin: 2rem auto 1rem;
+  border-radius: 1rem;
+}
+.coordinates { text-align: center; color: var(--muted); font-weight: 600; letter-spacing: 0.02em; }
+.animal-body h3 { margin: 1.5rem 0 0.25rem; font-size: 1.1rem; }
+.animal-body h3 + p { margin-top: 0.25rem; }
+/* Closing line of Your Portrait (the body's blockquote). */
+.animal-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.25rem;
+  border-left: 4px solid var(--highlight);
+  background: var(--card);
+  border-radius: 0 0.75rem 0.75rem 0;
+  font-size: 1.15rem;
+  font-style: italic;
+}
+.animal-body blockquote p { margin: 0; }
+.animal-body blockquote em { font-style: normal; }
+.animal-cta { text-align: center; margin-top: 2.5rem; }
 
 .placeholder-note { background: var(--placeholder); padding: 0.5rem 0.75rem; border-radius: 0.5rem; }
 
