@@ -18,5 +18,5 @@ npx wrangler deploy
 - `src/content/animals/*.md` — one file per animal (file name = URL slug)
 - `src/pages/animals/[slug].astro` — animal page template
 - `src/pages/api/` — reserved for future Worker endpoints (none yet)
-- `wrangler.jsonc` — Workers config; D1 binding is commented out until the database exists
+- `wrangler.jsonc` — Workers config; the D1 binding will be added in Stage 8
 - `src/site.config.mjs` — production domain
