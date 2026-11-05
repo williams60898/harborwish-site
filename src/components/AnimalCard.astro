@@ -10,11 +10,12 @@ const { animal } = Astro.props;
 const { data } = animal;
 ---
 
+<!-- Thumbnail is decorative (alt=""): the card text already names the animal. -->
 <li>
   <a href={animalPath(animal.id)}>
     <Image
       src={data.image}
-      alt={data.image_alt}
+      alt=""
       widths={[400, 800]}
       sizes="(min-width: 60rem) 14rem, (min-width: 28rem) 45vw, 100vw"
       width={data.image.width}
