@@ -213,6 +213,14 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; margin: 0 0 0.5rem; }
 .animal-body blockquote p { margin: 0; }
 .animal-body blockquote em { font-style: normal; }
 .animal-cta { text-align: center; margin-top: 2.5rem; }
+/* Help line closing the "If This Page Cuts Too Deep" section: a quiet, set-apart note. */
+.animal-body .help-line {
+  margin-top: 1.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
 
 .placeholder-note { background: var(--placeholder); padding: 0.5rem 0.75rem; border-radius: 0.5rem; }
 

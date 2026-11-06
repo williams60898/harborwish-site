@@ -89,3 +89,27 @@ export function linkNeighbors(
   }
   return { html: head + section, linked, plain };
 }
+
+const CRISIS_HEADING = 'If This Page Cuts Too Deep';
+const externalLink = (href: string, text: string) =>
+  `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+/** Owner-approved help line, shown as the last paragraph of the crisis section. */
+export const HELP_LINE_HTML =
+  '<p class="help-line">If this section sounds like where you are right now, please don’t carry it alone. ' +
+  `In the US, call or text ${externalLink('https://988lifeline.org', '988')}. ` +
+  `Anywhere else, ${externalLink('https://findahelpline.com', 'findahelpline.com')} will show you a helpline in your country.</p>`;
+
+/**
+ * If the rendered body has an "If This Page Cuts Too Deep" section, append the help line as its
+ * last paragraph (just before the next h2, or at the end). Bodies without that section are
+ * returned unchanged, so "A Gentle Note" pages never get it.
+ */
+export function addHelpLine(html: string): { html: string; added: boolean } {
+  const m = new RegExp(`<h2[^>]*>${escapeRegExp(CRISIS_HEADING)}</h2>`).exec(html);
+  if (!m) return { html, added: false };
+  const after = m.index + m[0].length;
+  const next = html.indexOf('<h2', after);
+  const end = next === -1 ? html.length : next;
+  const insert = HELP_LINE_HTML + '\n';
+  return { html: html.slice(0, end) + insert + html.slice(end), added: true };
+}
