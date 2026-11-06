@@ -7,6 +7,7 @@ import {
   animalPath,
   animalTitle,
   linkNeighbors,
+  addHelpLine,
   ogImagePath,
   OG_IMAGE_SIZE,
   type Animal,
@@ -24,7 +25,8 @@ const { data } = animal;
 // Body from the content file, with neighbor names linked only where their page exists.
 const rendered = animal.rendered?.html;
 if (!rendered) throw new Error(`No rendered body for ${animal.id}`);
-const body = linkNeighbors(rendered, data.neighbors, existing).html;
+// Pages with an "If This Page Cuts Too Deep" section also get the help line at its end.
+const body = addHelpLine(linkNeighbors(rendered, data.neighbors, existing).html).html;
 
 const path = animalPath(animal.id);
 const site = Astro.site!;
