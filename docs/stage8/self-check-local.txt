@@ -1,0 +1,245 @@
+# Stage 8 self-check output — bash scripts/stage8/run-all.sh (local, 2026-11-07T13:49Z)
+
+### 15. build + type check
+npm run build: OK (21 prerendered files)
+Result (45 files): 
+- 0 errors
+- 0 warnings
+- 1 hint
+
+### 1, 8 (build), 12, 13
+== 1. data files
+86223e93615a0e91fd6197869dc9c8d63cf2f3d6affacd6d074a65781d16a1e0  src/server/quiz/engine.js
+d893fcae08fb304829a478062cfea241323c3b8219bb9cc103cbebd7cc070641  src/server/quiz/scoring.js
+19ca55f267edf7aa2d6ebeba4d8fdf3d1c09d28897678d589d59f8e47a10676b  src/server/quiz/animals.en.js
+git diff origin/main -- src/server/quiz/questions.en.js | wc -c → 0
+== 8. build output
+find dist/client -path dist/client/test* -o -name test.html | wc -l → 0
+(files whose name merely contains 'test': dist/client/_astro/test.CLWqFmso.css dist/client/_astro/test.astro_astro_type_script_index_0_lang.BmyXSJh7.js — the page's hashed client script/style, not a page)
+grep -c '/test' dist/client/sitemap.xml → 0
+home page main button: <a class="button" href="/animals/">Meet the 64 Mood Animals</a>
+== 12. browser-facing build output (dist/client only)
+scene valence-3 "Dinner alone tonight. You put something …" → 0 files
+scene energy-2 "A whole weekend, totally free. No plans,…" → 0 files
+scene control-5 "There's a wrong charge on your bill, and…" → 0 files
+scene social-9 "Someone in the group chat: "We should al…" → 0 files
+scene time-14 "Something new is starting: a new apartme…" → 0 files
+grep -rlF OPTION_SCORE dist/client → 0 files
+grep -rlF tierOf dist/client → 0 files
+grep -rlF isHighPole dist/client → 0 files
+grep -rlF scoreDimension dist/client → 0 files
+grep -rlF slotOf dist/client → 0 files
+grep -rlF computeResult dist/client → 0 files
+grep -rlF buildPool dist/client → 0 files
+grep -rlF drawThree dist/client → 0 files
+grep -rlF RESULT_SIGNING_KEY dist/client → 0 files
+grep -rlF TURNSTILE_SECRET_KEY dist/client → 0 files
+grep -rlF "Your Undercurrent" dist/client → dist/client/sample-report/index.html dist/client/how-it-works/index.html dist/client/pricing/index.html 
+   dist/client/how-it-works/index.html: pre-existing on main, src/pages/how-it-works.astro unchanged on this branch
+   dist/client/pricing/index.html: pre-existing on main, src/pages/pricing.astro unchanged on this branch
+grep -rlF "Your Relationships" dist/client → dist/client/sample-report/index.html dist/client/how-it-works/index.html dist/client/pricing/index.html 
+   dist/client/how-it-works/index.html: pre-existing on main, src/pages/how-it-works.astro unchanged on this branch
+   dist/client/pricing/index.html: pre-existing on main, src/pages/pricing.astro unchanged on this branch
+grep -rlF "Your Trap" dist/client → dist/client/sample-report/index.html dist/client/how-it-works/index.html dist/client/pricing/index.html 
+   dist/client/how-it-works/index.html: pre-existing on main, src/pages/how-it-works.astro unchanged on this branch
+   dist/client/pricing/index.html: pre-existing on main, src/pages/pricing.astro unchanged on this branch
+grep -rlF "Your Way Out" dist/client → dist/client/sample-report/index.html dist/client/how-it-works/index.html dist/client/pricing/index.html 
+   dist/client/how-it-works/index.html: pre-existing on main, src/pages/how-it-works.astro unchanged on this branch
+   dist/client/pricing/index.html: pre-existing on main, src/pages/pricing.astro unchanged on this branch
+option ids from questions.en.js found in dist/client: 0 of 384
+== 13. browser code: storage / history / hash
+client scripts: dist/client/_astro/test.astro_astro_type_script_index_0_lang.BmyXSJh7.js
+document.cookie → 0 files
+localStorage → 0 files
+sessionStorage → 0 files
+indexedDB → 0 files
+history.pushState → 0 files
+history.replaceState → 0 files
+location.hash → 0 files
+== 13. server code: no logging of body / answers / token
+src/server/stats.ts:24:    console.error('stats write failed');
+src/pages/api/score.ts:28:    console.error(`${missing.join(', ')} missing`);
+console.* mentioning body/answers/token/request → 0
+ALL PASS
+
+### 2, 4
+2. combos=64 distinct slots=64 min=1 max=64 each-once=true
+2. content capybara.md       slot=35 name=match coordinates=match
+2. content cheetah.md        slot=49 name=match coordinates=match
+2. content dolphin.md        slot=63 name=match coordinates=match
+2. content hedgehog.md       slot=28 name=match coordinates=match
+2. content panda.md          slot=33 name=match coordinates=match
+2. content polar-bear.md     slot= 2 name=match coordinates=match
+2. content pufferfish.md     slot=20 name=match coordinates=match
+2. content snow-leopard.md   slot= 1 name=match coordinates=match
+4. valence  low 冷=冷→Cold  high 暖=暖→Warm
+4. energy   low 沉=沉→Low  high 烧=烧→High
+4. control  low 主人=主人→In Control  high 人质=人质→Carried Along
+4. social   low 独处=独处→Avoidant  high 朝人=朝人→Approaching
+4. time     low 回头=回头→Past  high 张望=张望→Future
+4. clarity  low 看清=看清→Clear  high 雾里=雾里→Blurred
+4. tiers from tierOf(0..9): 重→h 中→m 轻→l
+ALL PASS
+
+### 7 (module)
+ok   7. issued token verifies: {"v":1,"rid":"kJ2WYjSgpx2u7CAxd3QSoQ","animal":"snow-leopard","intensity":"hhhhhh","iat":1794059298}
+ok   7. payload changed by one character → rejected
+ok   7. signature changed by one character → rejected
+ok   7. different key → rejected
+ok   7. no key → rejected
+ok   7. payload keys: v,rid,animal,intensity,iat
+ok   7. rid decodes to 16 bytes, no padding
+ok   7. iat is Unix seconds: 1794059298
+ok   7. 1,000 tokens → 1000 distinct rids
+ok   7. issue without key throws: RESULT_SIGNING_KEY missing
+ALL PASS
+
+### 8 (isQuizEnabled)
+ok   8. harborwish-site.williams60898.workers.dev                    QUIZ_PUBLIC=off       → off
+ok   8. harborwish.com                                               QUIZ_PUBLIC=off       → off
+ok   8. www.harborwish.com                                           QUIZ_PUBLIC=off       → off
+ok   8. abc-harborwish-site.williams60898.workers.dev                QUIZ_PUBLIC=off       → on 
+ok   8. a1b2c3d4-harborwish-site.williams60898.workers.dev           QUIZ_PUBLIC=off       → on 
+ok   8. localhost                                                    QUIZ_PUBLIC=off       → on 
+ok   8. 127.0.0.1                                                    QUIZ_PUBLIC=off       → on 
+ok   8. -harborwish-site.williams60898.workers.dev                   QUIZ_PUBLIC=off       → off
+ok   8. evil-harborwish-site.williams60898.workers.dev.attacker.com  QUIZ_PUBLIC=off       → off
+ok   8. abc-harborwish-site.williams60898.workers.dev                QUIZ_PUBLIC=undefined → on 
+ok   8. harborwish.com                                               QUIZ_PUBLIC=undefined → off
+ok   8. harborwish-site.williams60898.workers.dev                    QUIZ_PUBLIC=on        → on 
+ok   8. harborwish.com                                               QUIZ_PUBLIC=on        → on 
+ok   8. www.harborwish.com                                           QUIZ_PUBLIC=on        → on 
+ALL PASS
+
+### local D1: migrate + empty the table
+✅ No migrations to apply!
+rows now: [{"n":0}]
+
+### 3, 5, 6, 14 (API)
+ok   3. all 0: 200 → snow-leopard "The Gazing Snow Leopard" token.intensity=hhhhhh (want snow-leopard, hhhhhh)
+     full response keys: animal,coordinates,safety,chapter,token | coordinates: Cold · Low · In Control · Avoidant · Past · Clear | safety: negative | chapter: true
+ok   3. response has only animal, coordinates, safety, chapter, token
+ok   3. animal has only slug, name, tagline
+ok   14. /api/score Cache-Control: no-store
+ok   3. all 3: 200 → monkey "The Restless Monkey" token.intensity=hhhhhh (want monkey, hhhhhh)
+ok   3. valence 3, rest 0: 200 → panda "The Boundary-Keeping Panda" token.intensity=hhhhhh (want panda, hhhhhh)
+ok   3. mixed: 200 → corgi "The Bustling Corgi" token.intensity=hmhhll (want corgi, hmhhll)
+     corgi coordinates: Warm · High · Carried Along · Approaching · Past · Clear | safety: positive | chapter: false
+ok   5. 20 calls: each 200, 18 questions (3 per axis, all different), 4 options each
+ok   5. JSON keys only questions/scene/options/id/text (extra: none)
+ok   5. score-3 option position 1–4: 84 / 76 / 104 / 96 of 360 = 23.3% / 21.1% / 28.9% / 26.7%
+ok   5. distinct question orders across 20 calls: 20
+ok   14. /api/questions Cache-Control: no-store
+ok   6. 17 answers (17): 400 {"error":"invalid_answers"}
+ok   6. 19 answers (19): 400 {"error":"invalid_answers"}
+ok   6. same option twice (18): 400 {"error":"invalid_answers"}
+ok   6. two options of one question (18): 400 {"error":"invalid_answers"}
+ok   6. valence 4, energy 2 (18): 400 {"error":"invalid_answers"}
+ok   6. unknown id (18): 400 {"error":"invalid_answers"}
+ok   6. answers not an array (string): 400 {"error":"invalid_answers"}
+SCORED_OK=4
+ALL PASS
+D1 total after the API checks (4 anchors scored, 7 invalid not): [{"total":4}]
+
+### 3 (browser: free-chapter embed incl. snow leopard crisis section + help line), 8.4, error path
+ok   snow-leopard: no Back on question 1
+ok   snow-leopard: Back visible on question 2
+ok   snow-leopard: Back returns to question 1 with the earlier choice marked
+ok   snow-leopard: kicker "Your mood animal right now"
+ok   snow-leopard: name "The Gazing Snow Leopard" · tagline "Sees everything, touches nothing."
+ok   snow-leopard: "Your Mood Moment · November 7, 2026"
+ok   snow-leopard: h1 count on page = 1
+ok   snow-leopard: free chapter shown, fallback hidden
+     chapter headings: H2 Your Six Dimensions | H2 Your Portrait | H2 If This Page Cuts Too Deep | H2 The Animals Nearest You
+ok   snow-leopard: image alt "The Low-Battery Snow Leopard meme card: “Love you. Not today.”" loading=lazy src=/_astro/snow-leopard.BZsKUpzy_Z1sCLHK.webp
+ok   snow-leopard: chapter has "If This Page Cuts Too Deep" + help line: "If this section sounds like where you are right now, please don’t carry it alone. In the US, call or text 988. Anywhere else, findahelpline.com will show you a helpline in your country."
+ok   snow-leopard: cookie="" localStorage=0 sessionStorage=0 indexedDB=0 url unchanged=true history 2→2
+ok   snow-leopard: Take it again → start page
+ok   corgi: 429 → "Too many tries in a row. Please wait a minute, then try again." while on "Question 18 of 18"
+ok   corgi: kicker "Your mood animal right now"
+ok   corgi: name "The Bustling Corgi" · tagline "Helps with everything, just to be taken along."
+ok   corgi: "Your Mood Moment · November 7, 2026"
+ok   corgi: h1 count on page = 1
+ok   corgi: no chapter, no image, fallback shown
+ok   corgi: "Emotional coordinates: Warm · High · Carried Along · Approaching · Past · Clear"
+ok   corgi: "This animal’s full chapter is on its way."
+ok   corgi: safety block hidden
+ok   corgi: cookie="" localStorage=0 sessionStorage=0 indexedDB=0 url unchanged=true history 2→2
+ok   corgi: Take it again → start page
+ok   gray-wolf: kicker "Your mood animal right now"
+ok   gray-wolf: name "The Roaming Gray Wolf" · tagline "Knows the way, walks it alone."
+ok   gray-wolf: "Your Mood Moment · November 7, 2026"
+ok   gray-wolf: h1 count on page = 1
+ok   gray-wolf: no chapter, no image, fallback shown
+ok   gray-wolf: "Emotional coordinates: Cold · Low · In Control · Avoidant · Future · Clear"
+ok   gray-wolf: "This animal’s full chapter is on its way."
+ok   gray-wolf: safety block shown
+     safety block:
+       If This Page Cuts Too Deep
+       What to watch for was never how loud the pain gets — it’s the signal going quiet: needing less, reaching for no one, caring about less and less. That kind of calm needs to be seen by someone, more than any breakdown ever would.
+       Go find the person who can catch you — a counselor or doctor, or the one person you trust enough to tell the truth. This isn’t weakness. It’s the most clear-eyed thing you can do for yourself right now.
+       If this section sounds like where you are right now, please don’t carry it alone. In the US, call or text 988. Anywhere else, findahelpline.com will show you a helpline in your country.
+ok   gray-wolf: cookie="" localStorage=0 sessionStorage=0 indexedDB=0 url unchanged=true history 2→2
+ok   gray-wolf: Take it again → start page
+ok   snow-leopard-chapter-fetch-fails: kicker "Your mood animal right now"
+ok   snow-leopard-chapter-fetch-fails: name "The Gazing Snow Leopard" · tagline "Sees everything, touches nothing."
+ok   snow-leopard-chapter-fetch-fails: "Your Mood Moment · November 7, 2026"
+ok   snow-leopard-chapter-fetch-fails: h1 count on page = 1
+ok   snow-leopard-chapter-fetch-fails: no chapter, no image, fallback shown
+ok   snow-leopard-chapter-fetch-fails: "Emotional coordinates: Cold · Low · In Control · Avoidant · Past · Clear"
+ok   snow-leopard-chapter-fetch-fails: "This animal’s full chapter is on its way."
+ok   snow-leopard-chapter-fetch-fails: safety block shown
+     safety block:
+       If This Page Cuts Too Deep
+       What to watch for was never how loud the pain gets — it’s the signal going quiet: needing less, reaching for no one, caring about less and less. That kind of calm needs to be seen by someone, more than any breakdown ever would.
+       Go find the person who can catch you — a counselor or doctor, or the one person you trust enough to tell the truth. This isn’t weakness. It’s the most clear-eyed thing you can do for yourself right now.
+       If this section sounds like where you are right now, please don’t carry it alone. In the US, call or text 988. Anywhere else, findahelpline.com will show you a helpline in your country.
+ok   snow-leopard-chapter-fetch-fails: cookie="" localStorage=0 sessionStorage=0 indexedDB=0 url unchanged=true history 2→2
+ok   snow-leopard-chapter-fetch-fails: Take it again → start page
+ALL PASS
+(page-text checks: 36 passed, 0 failed)
+
+### 8 (routes by host, QUIZ_PUBLIC=off)
+harborwish-site.williams60898.workers.dev      /test/ 404  /api/questions 404  POST /api/score 404
+harborwish.com                                 /test/ 404  /api/questions 404  POST /api/score 404
+www.harborwish.com                             /test/ 404  /api/questions 404  POST /api/score 404
+abc-harborwish-site.williams60898.workers.dev  /test/ 200  /api/questions 200  POST /api/score 403
+production-host /test/ body is the site 404 page: <title>Page Not Found | Harborwish</title>
+production-host /api/questions body bytes: 0
+
+### 14 (headers)
+HTTP/1.1 200 OK
+Cache-Control: no-store
+X-Robots-Tag: noindex
+HTTP/1.1 200 OK
+Cache-Control: no-store
+HTTP/1.1 403 Forbidden
+Cache-Control: no-store
+
+### 9 (rate limit: 100 × POST /api/score from one IP, no Turnstile token)
+first 12: 403 403 403 403 403 403 403 403 403 403 429 429 
+     10 403
+     90 429
+requests 11–100 not 429: 0
+
+### 8 (QUIZ_PUBLIC=on, temporary — the config file is not touched)
+harborwish-site.williams60898.workers.dev      /test/ 200  /api/questions 200
+harborwish.com                                 /test/ 200  /api/questions 200
+www.harborwish.com                             /test/ 200  /api/questions 200
+wrangler.jsonc still says: 2 × QUIZ_PUBLIC=off
+
+### 10 (Turnstile, official test secrets)
+always-fail secret: {"error":"bot_check_failed"} HTTP 403
+always-pass secret: {"animal":{"slug":"snow-leopard","name":"The Gazing Snow Leopard","tagline":"Sees everything, touches nothing."},"coordinates":["Cold","Low","In Control","Avoidant","Past","Clear"],"safety":"negative","chapter":true,"token":"<redacted>"} HTTP 200
+
+### 7 (server: missing secrets → 500 server_config, log has only the names)
+no RESULT_SIGNING_KEY: {"error":"server_config"} HTTP 500
+RESULT_SIGNING_KEY missing
+no Turnstile keys: {"error":"server_config"} HTTP 500
+TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY missing
+
+### 11 (local D1)
+tables: [{"name":"_cf_METADATA"},{"name":"d1_migrations"},{"name":"daily_animal_counts"},{"name":"sqlite_sequence"}]
+columns: [{"name":"day","type":"TEXT","pk":1},{"name":"animal","type":"TEXT","pk":2},{"name":"count","type":"INTEGER","pk":0}]
+rows: [{"day":"2026-11-07","animal":"corgi","count":2},{"day":"2026-11-07","animal":"gray-wolf","count":1},{"day":"2026-11-07","animal":"monkey","count":1},{"day":"2026-11-07","animal":"panda","count":1},{"day":"2026-11-07","animal":"snow-leopard","count":4}]
+SUM(count) = 9; successful scorings = 4 (API) + 4 (browser) + 1 (Turnstile pass) = 9 → match

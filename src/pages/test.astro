@@ -1,0 +1,391 @@
+---
+// Stage 8 quiz page. Rendered on demand, and only where isQuizEnabled() is true (preview hosts and
+// localhost). Production hosts get the site's 404 page. Not in the sitemap; noindex.
+// This page must never import src/server/quiz/* or the result-token module. Scoring happens in
+// /api/score; the browser only ever sees scenes, option ids/texts and the public result fields.
+import { env } from 'cloudflare:workers';
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site.config.mjs';
+import { HELP_LINE_HTML } from '../lib/help-line';
+import { isQuizEnabled } from '../server/quiz-gate';
+
+export const prerender = false;
+
+const e = env;
+if (!isQuizEnabled(Astro.request, e)) {
+  // Astro answers an empty 404 with the site's existing (prerendered) 404 page.
+  return new Response(null, { status: 404 });
+}
+
+Astro.response.headers.set('X-Robots-Tag', 'noindex');
+Astro.response.headers.set('Cache-Control', 'no-store');
+
+const siteKey = e.TURNSTILE_SITE_KEY ?? '';
+const title = `Which Mood Animal Are You Right Now? | ${SITE_NAME}`;
+---
+
+{/* Like the 404 page: no canonical, no JSON-LD, noindex (owner-approved for /test/). */}
+<Base
+  title={title}
+  description="Answer 18 quick questions and meet the mood animal that matches how you feel right now."
+  noindex
+>
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+
+  <section class="quiz" id="quiz" data-site-key={siteKey}>
+    <div class="quiz-screen hero" data-screen="start">
+      <h1>Which Mood Animal Are You Right Now?</h1>
+      <p class="lede">18 quick questions. No right or wrong answers.</p>
+      <p class="lede">Answer for right now, not for how you usually are.</p>
+      <p class="small-print">Your answers are scored on our server and never stored. No account needed.</p>
+      <button type="button" class="button quiz-big" data-action="start">Start</button>
+      <p class="quiz-error" data-error="start" role="alert" hidden></p>
+    </div>
+
+    <div class="quiz-screen" data-screen="question" hidden>
+      <p class="quiz-progress-label" data-progress-label></p>
+      <div class="quiz-progress" aria-hidden="true"><div class="quiz-progress-bar" data-progress-bar></div></div>
+      <h2 class="quiz-scene" data-scene tabindex="-1"></h2>
+      <div class="quiz-options" data-options></div>
+      <p class="quiz-error" data-error="question" role="alert" hidden></p>
+      <button type="button" class="quiz-back" data-action="back" hidden>Back</button>
+    </div>
+
+    <div class="quiz-screen hero" data-screen="submitting" hidden>
+      <p class="lede" role="status">Finding your mood animal…</p>
+    </div>
+
+    <div class="quiz-screen" data-screen="result" hidden>
+      <article class="animal">
+        <p class="quiz-result-kicker">Your mood animal right now</p>
+        <div data-result-image></div>
+        <h2 class="quiz-result-name" data-result-name tabindex="-1"></h2>
+        <p class="lede quiz-result-tagline" data-result-tagline></p>
+        <p class="coordinates" data-result-moment></p>
+
+        <div class="animal-body" data-result-chapter hidden></div>
+
+        <div data-result-fallback hidden>
+          <p class="coordinates" data-result-coordinates></p>
+          <p class="quiz-on-its-way">This animal’s full chapter is on its way.</p>
+          <div class="animal-body" data-result-safety hidden>
+            <h2>If This Page Cuts Too Deep</h2>
+            <p>
+              What to watch for was never how loud the pain gets — it’s the signal going quiet: needing
+              less, reaching for no one, caring about less and less. That kind of calm needs to be seen by
+              someone, more than any breakdown ever would.
+            </p>
+            <p>
+              Go find the person who can catch you — a counselor or doctor, or the one person you trust
+              enough to tell the truth. This isn’t weakness. It’s the most clear-eyed thing you can do for
+              yourself right now.
+            </p>
+            <Fragment set:html={HELP_LINE_HTML} />
+          </div>
+        </div>
+
+        <p class="animal-cta">
+          <button type="button" class="button quiz-big" data-action="again">Take it again</button>
+        </p>
+      </article>
+    </div>
+
+    <div class="quiz-turnstile" data-turnstile></div>
+  </section>
+</Base>
+
+<style>
+  .quiz { max-width: 40rem; margin: 0 auto; }
+  .quiz-big { font-size: 1.15rem; padding: 0.9rem 2.25rem; border: 0; cursor: pointer; font-family: inherit; }
+  .quiz-progress-label { color: var(--muted); font-weight: 600; margin: 0 0 0.5rem; }
+  .quiz-progress { height: 0.5rem; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .quiz-progress-bar { height: 100%; width: 0; background: var(--highlight); transition: width 0.2s ease; }
+  .quiz-scene { color: var(--text); font-size: 1.25rem; margin: 1.5rem 0 1rem; outline: none; }
+  .quiz-options { display: grid; gap: 0.75rem; }
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    color: var(--text);
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1rem 1.1rem;
+    min-height: 3.5rem;
+    cursor: pointer;
+  }
+  .quiz-option:hover,
+  .quiz-option:focus-visible { border-color: var(--primary); }
+  .quiz-option[aria-pressed='true'] { border-color: var(--primary); box-shadow: 0 0 0 3px var(--highlight); }
+  .quiz-back {
+    margin-top: 1.25rem;
+    font: inherit;
+    font-weight: 600;
+    color: var(--primary);
+    background: none;
+    border: 0;
+    padding: 0.75rem 0;
+    cursor: pointer;
+  }
+  .quiz-error { color: var(--primary); font-weight: 600; background: var(--placeholder); padding: 0.75rem 1rem; border-radius: 0.5rem; }
+  .quiz-result-kicker { text-align: center; color: var(--muted); font-weight: 600; margin: 0 0 1rem; }
+  .quiz-result-name { text-align: center; font-size: clamp(1.75rem, 5vw, 2.5rem); color: var(--text); margin: 1rem 0 0.25rem; outline: none; }
+  .quiz-result-tagline { text-align: center; margin: 0 auto 0.5rem; }
+  .quiz-on-its-way { text-align: center; }
+</style>
+
+<script>
+  // Everything lives in this closure's memory: no cookies, no web storage, no URL or history changes.
+  type Option = { id: string; text: string };
+  type Question = { scene: string; options: Option[] };
+  type Result = {
+    animal: { slug: string; name: string; tagline: string };
+    coordinates: string[];
+    safety: 'negative' | 'positive';
+    chapter: boolean;
+    token: string;
+  };
+  type Turnstile = {
+    render(el: HTMLElement, opts: Record<string, unknown>): string;
+    execute(id: string): void;
+    reset(id: string): void;
+  };
+
+  const TEXT = {
+    loadFailed: 'The questions didn’t load. Please refresh the page.',
+    rateLimited: 'Too many tries in a row. Please wait a minute, then try again.',
+    botFailed: 'We couldn’t confirm this is a real visit. Please try again.',
+    generic: 'Something went wrong. Please try again.',
+  };
+
+  const root = document.getElementById('quiz')!;
+  const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+  const screens = root.querySelectorAll<HTMLElement>('[data-screen]');
+
+  let questions: Question[] = [];
+  let answers: string[] = [];
+  let current = 0;
+  let token: string | null = null;
+  let busy = false;
+
+  function show(name: string) {
+    screens.forEach((s) => (s.hidden = s.dataset.screen !== name));
+  }
+
+  function setError(where: 'start' | 'question', message: string | null) {
+    const el = $(`[data-error="${where}"]`);
+    el.textContent = message ?? '';
+    el.hidden = !message;
+  }
+
+  // --- Turnstile (interaction-only, token fetched at submit time) ---
+  let widgetId: string | null = null;
+  let pending: { resolve: (t: string) => void; reject: (e: Error) => void } | null = null;
+
+  function getTurnstile(): Turnstile | null {
+    return (window as unknown as { turnstile?: Turnstile }).turnstile ?? null;
+  }
+
+  async function waitForTurnstile(): Promise<Turnstile> {
+    for (let i = 0; i < 100; i++) {
+      const t = getTurnstile();
+      if (t) return t;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    throw new Error('turnstile_unavailable');
+  }
+
+  async function turnstileToken(): Promise<string> {
+    const ts = await waitForTurnstile();
+    if (widgetId === null) {
+      widgetId = ts.render($('[data-turnstile]'), {
+        sitekey: root.dataset.siteKey,
+        appearance: 'interaction-only',
+        execution: 'execute',
+        callback: (t: string) => { pending?.resolve(t); pending = null; },
+        'error-callback': () => { pending?.reject(new Error('turnstile_error')); pending = null; },
+        'expired-callback': () => { pending?.reject(new Error('turnstile_expired')); pending = null; },
+      });
+    } else {
+      ts.reset(widgetId);
+    }
+    return new Promise<string>((resolve, reject) => {
+      pending = { resolve, reject };
+      ts.execute(widgetId!);
+    });
+  }
+
+  // --- Questions ---
+  async function start() {
+    if (busy) return;
+    busy = true;
+    setError('start', null);
+    try {
+      const res = await fetch('/api/questions', { headers: { Accept: 'application/json' }, cache: 'no-store' });
+      if (!res.ok) throw new Error('load');
+      const data = await res.json();
+      if (!Array.isArray(data?.questions) || data.questions.length !== 18) throw new Error('load');
+      questions = data.questions;
+      answers = [];
+      current = 0;
+      renderQuestion();
+      show('question');
+    } catch {
+      setError('start', TEXT.loadFailed);
+    } finally {
+      busy = false;
+    }
+  }
+
+  function renderQuestion() {
+    const q = questions[current];
+    $('[data-progress-label]').textContent = `Question ${current + 1} of 18`;
+    $('[data-progress-bar]').style.width = `${(current / 18) * 100}%`;
+    $('[data-scene]').textContent = q.scene;
+    const box = $('[data-options]');
+    box.replaceChildren(
+      ...q.options.map((o) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'quiz-option';
+        b.textContent = o.text;
+        b.setAttribute('aria-pressed', String(answers[current] === o.id));
+        b.addEventListener('click', () => choose(o.id));
+        return b;
+      }),
+    );
+    $('[data-action="back"]').hidden = current === 0;
+    $<HTMLElement>('[data-scene]').focus({ preventScroll: true });
+    window.scrollTo({ top: 0 });
+  }
+
+  function choose(id: string) {
+    if (busy) return;
+    setError('question', null);
+    answers[current] = id;
+    if (current < 17) {
+      current += 1;
+      renderQuestion();
+    } else {
+      submit();
+    }
+  }
+
+  function back() {
+    if (busy || current === 0) return;
+    setError('question', null);
+    current -= 1;
+    renderQuestion();
+  }
+
+  // --- Submit ---
+  async function submit() {
+    busy = true;
+    show('submitting');
+    let message: string | null = null;
+    try {
+      let t: string;
+      try {
+        t = await turnstileToken();
+      } catch {
+        message = TEXT.botFailed;
+        throw new Error('bot');
+      }
+      const res = await fetch('/api/score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ answers: answers.slice(0, 18), turnstile: t }),
+        cache: 'no-store',
+      });
+      if (res.status === 429) message = TEXT.rateLimited;
+      else if (res.status === 403) message = TEXT.botFailed;
+      if (!res.ok) throw new Error('score');
+      const data = (await res.json()) as Result;
+      token = data.token; // Kept in memory only; used at Stage 9.
+      await renderResult(data);
+      show('result');
+      $<HTMLElement>('[data-result-name]').focus({ preventScroll: true });
+      window.scrollTo({ top: 0 });
+    } catch {
+      // Stay on the last question; choosing an answer again resubmits.
+      renderQuestion();
+      show('question');
+      setError('question', message ?? TEXT.generic);
+    } finally {
+      busy = false;
+    }
+  }
+
+  // --- Result ---
+  /** Pull the free chapter and poster out of the animal's own prerendered page (same content, same component). */
+  async function loadChapter(slug: string): Promise<{ body: HTMLElement; poster: HTMLImageElement | null } | null> {
+    try {
+      const res = await fetch(`/animals/${encodeURIComponent(slug)}/`, { headers: { Accept: 'text/html' } });
+      if (!res.ok) return null;
+      const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      const body = doc.querySelector<HTMLElement>('.animal-body');
+      if (!body || !body.textContent?.trim()) return null;
+      // Only one h1 on this page: demote any h1 that came along.
+      body.querySelectorAll('h1').forEach((h1) => {
+        const h2 = doc.createElement('h2');
+        h2.innerHTML = h1.innerHTML;
+        h1.replaceWith(h2);
+      });
+      const poster = doc.querySelector<HTMLImageElement>('img.poster');
+      return { body: document.importNode(body, true) as HTMLElement, poster: poster ? (document.importNode(poster, true) as HTMLImageElement) : null };
+    } catch {
+      return null;
+    }
+  }
+
+  async function renderResult(r: Result) {
+    $('[data-result-name]').textContent = r.animal.name;
+    $('[data-result-tagline]').textContent = r.animal.tagline;
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    $('[data-result-moment]').textContent = `Your Mood Moment · ${date}`;
+
+    const imageBox = $('[data-result-image]');
+    const chapterBox = $('[data-result-chapter]');
+    const fallback = $('[data-result-fallback]');
+    imageBox.replaceChildren();
+    chapterBox.replaceChildren();
+
+    const chapter = r.chapter ? await loadChapter(r.animal.slug) : null;
+    if (chapter) {
+      if (chapter.poster) {
+        chapter.poster.loading = 'lazy';
+        chapter.poster.removeAttribute('fetchpriority');
+        imageBox.append(chapter.poster);
+      }
+      chapterBox.replaceChildren(...Array.from(chapter.body.childNodes));
+      chapterBox.hidden = false;
+      fallback.hidden = true;
+    } else {
+      chapterBox.hidden = true;
+      $('[data-result-coordinates]').textContent = `Emotional coordinates: ${r.coordinates.join(' · ')}`;
+      $('[data-result-safety]').hidden = r.safety !== 'negative';
+      fallback.hidden = false;
+    }
+  }
+
+  function again() {
+    questions = [];
+    answers = [];
+    current = 0;
+    token = null;
+    void token;
+    $('[data-result-image]').replaceChildren();
+    $('[data-result-chapter]').replaceChildren();
+    setError('start', null);
+    setError('question', null);
+    show('start');
+    window.scrollTo({ top: 0 });
+  }
+
+  $('[data-action="start"]').addEventListener('click', start);
+  $('[data-action="back"]').addEventListener('click', back);
+  $('[data-action="again"]').addEventListener('click', again);
+</script>
