@@ -28,19 +28,9 @@ done
 for w in OPTION_SCORE tierOf isHighPole scoreDimension slotOf computeResult buildPool drawThree RESULT_SIGNING_KEY TURNSTILE_SECRET_KEY; do
   n=$(grep -rlF -- "$w" dist/client | wc -l); say "grep -rlF $w dist/client → $n files"; [ "$n" = 0 ] || bad "$w"
 done
-for w in "Your Undercurrent" "Your Relationships" "Your Trap" "Your Way Out"; do
-  files=$(grep -rlF -- "$w" dist/client | tr '\n' ' '); say "grep -rlF \"$w\" dist/client → ${files:-none}"
-  for f in $files; do
-    case "$f" in
-      dist/client/sample-report/index.html) ;;
-      # Pre-existing on main (approved submission copy v0.3: the chapter names in the product description).
-      dist/client/how-it-works/index.html|dist/client/pricing/index.html)
-        src="src/pages/$(basename "$(dirname "$f")").astro"
-        [ -z "$(git diff origin/main -- "$src")" ] && say "   $f: pre-existing on main, $src unchanged on this branch" || bad "$w in $f and $src changed";;
-      *) bad "$w in $f";;
-    esac
-  done
-done
+# Paid content (owner rule, Stage 8 follow-up): chapter names only on how-it-works, pricing,
+# sample-report; paid body text on no page (the approved sample-report excerpt must match the copy doc).
+node scripts/stage8/check-paid.mjs || bad "paid content (check 12)"
 say "option ids from questions.en.js found in dist/client: $(node -e "import('./src/server/quiz/questions.en.js').then(({BANK})=>{const fs=require('fs'),p=require('path');const ids=Object.values(BANK).flatMap(d=>d.base.flatMap(q=>q.options.map(o=>o.id)));const files=[];const walk=d=>fs.readdirSync(d,{withFileTypes:true}).forEach(e=>e.isDirectory()?walk(p.join(d,e.name)):/\.(html|js|css|json|xml|txt)$/.test(e.name)&&files.push(p.join(d,e.name)));walk('dist/client');const all=files.map(f=>fs.readFileSync(f,'utf8')).join('\n');console.log(ids.filter(i=>all.includes(i)).length+' of '+ids.length)})")"
 
 say "== 13. browser code: storage / history / hash"
