@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SITE_NAME } from '../site.config.mjs';
+import { HELP_LINE_HTML } from './help-line';
 
 export type Animal = CollectionEntry<'animals'>;
 
@@ -91,13 +92,7 @@ export function linkNeighbors(
 }
 
 const CRISIS_HEADING = 'If This Page Cuts Too Deep';
-const externalLink = (href: string, text: string) =>
-  `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
-/** Owner-approved help line, shown as the last paragraph of the crisis section. */
-export const HELP_LINE_HTML =
-  '<p class="help-line">If this section sounds like where you are right now, please don’t carry it alone. ' +
-  `In the US, call or text ${externalLink('https://988lifeline.org', '988')}. ` +
-  `Anywhere else, ${externalLink('https://findahelpline.com', 'findahelpline.com')} will show you a helpline in your country.</p>`;
+export { HELP_LINE_HTML };
 
 /**
  * If the rendered body has an "If This Page Cuts Too Deep" section, append the help line as its

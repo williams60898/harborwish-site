@@ -6,7 +6,48 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "binding": "ASSETS",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    // Stage 8: on-demand routes must reach the Worker. Without this, browser navigations to /test/
+    // (no static file) get the static 404 page straight from the asset layer.
+    "run_worker_first": ["/test", "/test/", "/api/*"]
+  },
+
+  // Stage 8 (owner-approved): quiz test system, live on preview URLs only.
+  // QUIZ_PUBLIC stays "off"; changing it needs the owner's approval (see CLAUDE.md).
+  // Secrets (RESULT_SIGNING_KEY, TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY) live only in
+  // Cloudflare encrypted variables, never here.
+  "vars": {
+    "QUIZ_PUBLIC": "off"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "harborwish-db",
+      "database_id": "fabe49a7-7e95-4f72-815a-9420c0286ff0",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "ratelimits": [
+    { "name": "SCORE_LIMITER", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } },
+    { "name": "QUESTIONS_LIMITER", "namespace_id": "1002", "simple": { "limit": 30, "period": 60 } }
+  ],
+
+  // Mirror of the bindings above for Worker Previews (`wrangler preview`).
+  "previews": {
+    "vars": {
+      "QUIZ_PUBLIC": "off"
+    },
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "harborwish-db",
+        "database_id": "fabe49a7-7e95-4f72-815a-9420c0286ff0",
+        "migrations_dir": "migrations"
+      }
+    ],
+    "ratelimits": [
+      { "name": "SCORE_LIMITER", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } },
+      { "name": "QUESTIONS_LIMITER", "namespace_id": "1002", "simple": { "limit": 30, "period": 60 } }
+    ]
   }
-  // D1 database binding will be added in Stage 8 (database not created yet).
 }

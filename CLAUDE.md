@@ -67,3 +67,11 @@
 - 不要把任何密码或令牌写进代码；密钥只放在 Cloudflare 的加密变量（secrets）里。
 - 打分规则和付费内容只放在服务器端，绝不下发到浏览器。
 - 遇到需要负责人决定的事，先问，不要自行决定。
+
+## 阶段 8 测试系统（负责人批准，2026-11-07）
+
+1. `src/server/quiz/` 下所有文件和结果凭证模块（`src/server/result-token.ts`）只许服务器端接口（`src/pages/api/`）引用；任何页面、组件、浏览器脚本都不许 import。
+2. 测试入口（`/test/`、`/api/questions`、`/api/score`）只在 `isQuizEnabled`（`src/server/quiz-gate.ts`）为真时存在；正式网址关着。改 `QUIZ_PUBLIC` 或开关逻辑要先问 Williams。
+3. 接口不许返回格位、字母编码、分数、和、档位；题号和维度名不出服务器。
+4. 不记录答案、请求体、凭证；不用 cookie 和任何浏览器存储。
+5. 已同意的接口：`GET /api/questions`、`POST /api/score`；已同意的表：`daily_animal_counts`。再新增仍要先问。
